@@ -11,7 +11,8 @@
   ],
   "activationEvents": [
     "onCommand:codestories.helloWorld",
-    "onCommand:codestories.commandTwo"
+    "onCommand:codestories.commandTwo",
+    "onView:codeStories"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -24,7 +25,15 @@
         "command": "codestories.commandTwo",
         "title": "Command Two"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "codeStories",
+          "name": "Code Stories"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
