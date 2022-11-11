@@ -7,19 +7,60 @@ import * as path from 'path';
 // Data Provider for the Code Stories TreeView 
 // documentaion on TreeDataProvider: https://code.visualstudio.com/api/extension-guides/tree-view
 
+
+
+
 //class CodeStoriesProvider implements vscode.TreeDataProvider
 class CodeStoriesProvider implements vscode.TreeDataProvider<TreeItem> {
 	onDidChangeTreeData?: vscode.Event<TreeItem|null|undefined>|undefined;
 
 	data: TreeItem[];  
 
-	constructor() {
-		this.data = [new TreeItem('cars', [
-			new TreeItem(
-				'Ford', [new TreeItem('Fiesta'), new TreeItem('Focus'), new TreeItem('Mustang')]),
-			new TreeItem(
-				'BMW', [new TreeItem('320'), new TreeItem('X3'), new TreeItem('X5')])
-		])];
+
+	// constructor full of arbitrary data (use this for display purposes)
+	// constructor() {
+	// 	this.data = [new TreeItem('Subgoal 1', [
+	// 		new TreeItem("Change 1", [
+	// 			new TreeItem("Web Resources", [
+	// 				new TreeItem("www.test.com")
+	// 			]),
+	// 			new TreeItem("Errors Fixed By Change", [
+	// 				new TreeItem("Error 1")
+	// 			])
+	// 		]),
+	// 		new TreeItem("Change 2", [
+	// 			new TreeItem("Web Resources", [
+	// 				new TreeItem("www.test2.com")
+	// 			]),
+	// 			new TreeItem("Errors Fixed By Change", [
+	// 				new TreeItem("Error 1")
+	// 			])
+	// 		]),
+	// 	]),
+	// 	new TreeItem('Subgoal 2', [
+	// 		new TreeItem("Change 1", [
+	// 			new TreeItem("Web Resources", [
+	// 				new TreeItem("www.test.com")
+	// 			]),
+	// 			new TreeItem("Errors Fixed By Change", [
+	// 				new TreeItem("Error 1")
+	// 			])
+	// 		]),
+	// 		new TreeItem("Change 2", [
+	// 			new TreeItem("Web Resources", [
+	// 				new TreeItem("www.test2.com")
+	// 			]),
+	// 			new TreeItem("Errors Fixed By Change", [
+	// 				new TreeItem("Error 1")
+	// 			])
+	// 		]),
+	// 	])
+	// ];
+	// }
+
+	constructor () {
+		// this.data = this.formatCodeStoryData(this.getStoriesForCurrentFile());
+		this.data = [];
 	}
 
 	getTreeItem(element: TreeItem): vscode.TreeItem|Thenable<vscode.TreeItem> {
@@ -31,6 +72,27 @@ class CodeStoriesProvider implements vscode.TreeDataProvider<TreeItem> {
 			return this.data;
 		}
 		return element.children;
+	}
+
+	getStoriesForCurrentFile(): Object {
+		/* Get Code Story Data for Current File */
+
+		// get current working file
+		// var currentlyOpenTabfilePath = vscode.window.activeTextEditor?.document.uri.fsPath;
+		let pathToCurFile = vscode.window.activeTextEditor?.document.uri.fsPath;
+
+		// get name of file
+		let splitFilePath = pathToCurFile?.split("\\");
+		let fileName = splitFilePath?[splitFilePath.length - 1]
+
+		// In practice, we will have a database that we can query for all information about pathToCurFile
+
+		return {};
+	}
+	
+	formatCodeStoryData(): Array<TreeItem> {
+		/* Formats given Code Story JSON data as a hierarchy of TreeItems */
+		return [];
 	}
 
 }
@@ -45,11 +107,10 @@ class TreeItem extends vscode.TreeItem {
 	  super(
 		  label,
 		  children === undefined ? vscode.TreeItemCollapsibleState.None :
-								   vscode.TreeItemCollapsibleState.Expanded);
+								   vscode.TreeItemCollapsibleState.Collapsed); // change to Expanded to be expanded by default
 	  this.children = children;
 	}
 }
-
 
 
 // This method is called when your extension is activated
@@ -59,6 +120,10 @@ export function activate(context: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "codestories" is now active!');
+
+	// console.log(vscode.window.activeTextEditor?.document.uri.fsPath);
+	console.log(vscode.window.activeTextEditor?.document.uri.fsPath);
+
 
 	// create TreeView and register the TreeView Data Provider (for our Tree View called Code Stories)
 	vscode.window.registerTreeDataProvider('codeStories', new CodeStoriesProvider());
